@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test AnimalAdoption.Web.Portal.UnitTests --no-build --verbosity normal
     - name: Publish
       run: dotnet publish --no-restore --output build
     - name: Upload a Build Artifact
