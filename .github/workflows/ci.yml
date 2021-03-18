@@ -32,6 +32,11 @@ jobs:
         name: .Net Artifact # optional, default is artifact
         # A file, directory or wildcard pattern that describes what to upload
         path: build
+    - name: Package and push to Package registry
+      run: dotnet pack AnimalAdoption.Common.Logic --output nupkgs &&
+        dotnet nuget push "nupkgs/*.nupkg" -k $GH_TOKEN --source "github"
+      env: 
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
         # The desired behavior if no files are found using the provided path.
       # Available Options:
       #   warn: Output a warning but do not fail the action
