@@ -24,6 +24,7 @@ namespace AnimalAdoption.Web.Portal.FunctionalTests
             {
                 PageLoadStrategy = PageLoadStrategy.Normal
             };
+            options.AddArgument("--headless");
             _driver = new ChromeDriver(options);
         }
 
