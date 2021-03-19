@@ -36,12 +36,12 @@ jobs:
         name: .Net Artifact # optional, default is artifact
         # A file, directory or wildcard pattern that describes what to upload
         path: build
-    - name: Package and push to Package registry
-      run: dotnet pack --configuration Release AnimalAdoption.Common.Logic --output nupkgs &&
-        dotnet nuget push "nupkgs/*.nupkg" -k ${GH_TOKEN} --source https://nuget.pkg.github.com/${REPO_OWNER}/index.json
-      env: 
-        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        REPO_OWNER: ${{ github.repository_owner }}
+    # - name: Package and push to Package registry
+    #   run: dotnet pack --configuration Release AnimalAdoption.Common.Logic --output nupkgs &&
+    #     dotnet nuget push "nupkgs/*.nupkg" -k ${GH_TOKEN} --source https://nuget.pkg.github.com/${REPO_OWNER}/index.json
+    #   env: 
+    #     GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    #     REPO_OWNER: ${{ github.repository_owner }}
         # The desired behavior if no files are found using the provided path.
       # Available Options:
       #   warn: Output a warning but do not fail the action
