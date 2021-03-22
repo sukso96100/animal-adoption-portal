@@ -2,20 +2,24 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_ghhack_name": {
+        "appsvc_name": {
             "defaultValue": "hybiac",
             "type": "String"
         },
-        "serverfarms_ASP_youngbintest_bb66_name": {
+        "appservice_plan_name": {
             "defaultValue": "hybiac_asp",
             "type": "String"
         },
-        "vaults_youngbin_test_keyvault_name": {
+        "keyvault_name": {
             "defaultValue": "hybiackv",
             "type": "String"
         },
-        "virtualNetworks_youngbin_test_vnet_name": {
+        "vnet_name": {
             "defaultValue": "hybiac_vnet",
+            "type": "String"
+        },
+        "sp_client_id": {
+            "defaultValue": "decc3258-f97e-4d73-8c01-4fddf36adec0",
             "type": "String"
         }
     },
@@ -24,7 +28,7 @@
         {
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2016-10-01",
-            "name": "[parameters('vaults_youngbin_test_keyvault_name')]",
+            "name": "[parameters('keyvault_name')]",
             "location": "koreacentral",
             "properties": {
                 "sku": {
@@ -35,7 +39,7 @@
                 "accessPolicies": [
                     {
                         "tenantId": "6d5ac8ee-3862-4452-93e7-a836c2d9742b",
-                        "objectId": "5da7520f-687b-48ea-9949-94c06a1f4c58",
+                        "objectId": "[parameters('sp_client_id')]",
                         "permissions": {
                             "keys": [],
                             "secrets": [
@@ -50,49 +54,6 @@
                             ],
                             "certificates": []
                         }
-                    },
-                    {
-                        "tenantId": "6d5ac8ee-3862-4452-93e7-a836c2d9742b",
-                        "objectId": "e50779bb-c80c-42e8-9537-5938988ac6c8",
-                        "permissions": {
-                            "keys": [
-                                "Get",
-                                "List",
-                                "Update",
-                                "Create",
-                                "Import",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore"
-                            ],
-                            "secrets": [
-                                "Get",
-                                "List",
-                                "Set",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore"
-                            ],
-                            "certificates": [
-                                "Get",
-                                "List",
-                                "Update",
-                                "Create",
-                                "Import",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore",
-                                "ManageContacts",
-                                "ManageIssuers",
-                                "GetIssuers",
-                                "ListIssuers",
-                                "SetIssuers",
-                                "DeleteIssuers"
-                            ]
-                        }
                     }
                 ],
                 "enabledForDeployment": false,
@@ -104,7 +65,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-08-01",
-            "name": "[parameters('virtualNetworks_youngbin_test_vnet_name')]",
+            "name": "[parameters('vnet_name')]",
             "location": "koreacentral",
             "properties": {
                 "addressSpace": {
@@ -130,7 +91,7 @@
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
-            "name": "[parameters('serverfarms_ASP_youngbintest_bb66_name')]",
+            "name": "[parameters('appservice_plan_name')]",
             "location": "Korea Central",
             "sku": {
                 "name": "S1",
@@ -155,10 +116,10 @@
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2016-10-01",
-            "name": "[concat(parameters('vaults_youngbin_test_keyvault_name'), '/aaploginpass')]",
+            "name": "[concat(parameters('keyvault_name'), '/aaploginpass')]",
             "location": "koreacentral",
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_youngbin_test_keyvault_name'))]"
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvault_name'))]"
             ],
             "properties": {
                 "attributes": {
@@ -169,9 +130,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-08-01",
-            "name": "[concat(parameters('virtualNetworks_youngbin_test_vnet_name'), '/default')]",
+            "name": "[concat(parameters('vnet_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_youngbin_test_vnet_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnet_name'))]"
             ],
             "properties": {
                 "addressPrefix": "10.0.0.0/24",
@@ -183,27 +144,27 @@
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",
-            "name": "[parameters('sites_ghhack_name')]",
+            "name": "[parameters('appsvc_name')]",
             "location": "Korea Central",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_youngbintest_bb66_name'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appservice_plan_name'))]"
             ],
             "kind": "app",
             "properties": {
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(parameters('sites_ghhack_name'), '.azurewebsites.net')]",
+                        "name": "[concat(parameters('appsvc_name'), '.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(parameters('sites_ghhack_name'), '.scm.azurewebsites.net')]",
+                        "name": "[concat(parameters('appsvc_name'), '.scm.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_youngbintest_bb66_name'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appservice_plan_name'))]",
                 "reserved": false,
                 "isXenon": false,
                 "hyperV": false,
@@ -221,10 +182,10 @@
         {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_ghhack_name'), '/web')]",
+            "name": "[concat(parameters('appsvc_name'), '/web')]",
             "location": "Korea Central",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_ghhack_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('appsvc_name'))]"
             ],
             "properties": {
                 "numberOfWorkers": 1,
@@ -294,10 +255,10 @@
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_ghhack_name'), '/0837cea479304c41856b7b71e5956087')]",
+            "name": "[concat(parameters('appsvc_name'), '/0837cea479304c41856b7b71e5956087')]",
             "location": "Korea Central",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_ghhack_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('appsvc_name'))]"
             ],
             "properties": {
                 "status": 4,
@@ -313,10 +274,10 @@
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_ghhack_name'), '/', parameters('sites_ghhack_name'), '.azurewebsites.net')]",
+            "name": "[concat(parameters('appsvc_name'), '/', parameters('appsvc_name'), '.azurewebsites.net')]",
             "location": "Korea Central",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_ghhack_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('appsvc_name'))]"
             ],
             "properties": {
                 "siteName": "ghhack",
