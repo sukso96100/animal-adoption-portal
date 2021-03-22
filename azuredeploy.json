@@ -3,27 +3,27 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_ghhack_name": {
-            "defaultValue": "ghhack_iac",
+            "defaultValue": "ghhackiac",
             "type": "String"
         },
         "components_ghhack_name": {
-            "defaultValue": "ghhack_iac",
+            "defaultValue": "ghhackiac",
             "type": "String"
         },
         "serverfarms_ASP_youngbintest_bb66_name": {
-            "defaultValue": "ASP-youngbintest-bb66_iac",
+            "defaultValue": "ASP-youngbintest-bb66iac",
             "type": "String"
         },
         "vaults_youngbin_test_keyvault_name": {
-            "defaultValue": "youngbin-test-keyvault_iac",
+            "defaultValue": "youngbin-test-keyvaultiac",
             "type": "String"
         },
         "virtualNetworks_youngbin_test_vnet_name": {
-            "defaultValue": "youngbin-test-vnet_iac",
+            "defaultValue": "youngbin-test-vnetiac",
             "type": "String"
         },
         "smartdetectoralertrules_failure_anomalies___ghhack_name": {
-            "defaultValue": "failure anomalies - ghhack_iac",
+            "defaultValue": "failure anomalies - ghhackiac",
             "type": "String"
         },
         "actiongroups_application_insights_smart_detection_externalid": {
