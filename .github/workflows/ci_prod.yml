@@ -54,6 +54,7 @@ jobs:
         with:
           resourceGroupName: ${{ env.AZURE_RGNAME }}
           template: ./azuredeploy.json
+          parameters: .azuredeploy.parameters.json
       # - uses: Azure/get-keyvault-secrets@v1
       #   with:
       #     keyvault: "youngbin-test-keyvault"

@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_ghhack_name": {
+            "value": "hybiacweb"
+        },
+        "serverfarms_ASP_youngbintest_bb66_name": {
+            "value": "hybiacasp"
+        },
+        "vaults_youngbin_test_keyvault_name": {
+            "value": "hybiackv"
+        },
+        "virtualNetworks_youngbin_test_vnet_name": {
+            "value": "hybiacvnet"
+        }
+    }
+}
