@@ -11,6 +11,7 @@ env:
   DOTNET_VERSION: 3.1.x 
   ARTIFACT_NAME: dotnetapp
   AZURE_RGNAME: youngbin-iac-rg-test
+  OPENQA_TEST_URL: https://hybiacweb.azurewebsites.net/
 
 jobs:
   build:
@@ -28,7 +29,9 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test AnimalAdoption.Web.Portal.UnitTests --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal
+      env:
+        ANIMAL_ADOPTION_FUNCTIONAL_TEST_PATH: ${{ env.OPENQA_TEST_URL }}
     - name: Publish
       run: dotnet publish --no-restore --output build
     - name: Upload a Build Artifact
