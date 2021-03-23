@@ -32,7 +32,7 @@
                     "name": "Standard"
                 },
                 "tenantId": "6d5ac8ee-3862-4452-93e7-a836c2d9742b",
-                "accessPolicies":[],
+                "accessPolicies": "[reference(parameters('vaults_youngbin_test_keyvault_name')).properties.accessPolicies]",
                 "enabledForDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": false,
