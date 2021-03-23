@@ -63,6 +63,7 @@ jobs:
         with:
           keyvault: "hybiackv"
           secrets: 'aaploginpass'  # comma separated list of secret keys that need to be fetched from the Key Vault 
+          slot-name: 'staging'
         id: azKeyvaultSecret
       - uses: azure/appservice-settings@v1
         with:
@@ -75,3 +76,4 @@ jobs:
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
           package: ${{ env.ARTIFACT_NAME }}
+          slot-name: 'staging'
