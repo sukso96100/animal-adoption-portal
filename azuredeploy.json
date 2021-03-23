@@ -32,7 +32,78 @@
                     "name": "Standard"
                 },
                 "tenantId": "6d5ac8ee-3862-4452-93e7-a836c2d9742b",
-                "accessPolicies": "[reference(parameters('vaults_youngbin_test_keyvault_name')).properties.accessPolicies]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "6d5ac8ee-3862-4452-93e7-a836c2d9742b",
+                        "objectId": "87e86710-ff3c-4ecc-bf49-e265eacc8b99",
+                        "permissions": {
+                            "keys": [],
+                            "secrets": [
+                                "Get",
+                                "List",
+                                "Set",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "Purge"
+                            ],
+                            "certificates": []
+                        }
+                    },
+                    {
+                        "tenantId": "6d5ac8ee-3862-4452-93e7-a836c2d9742b",
+                        "objectId": "e50779bb-c80c-42e8-9537-5938988ac6c8",
+                        "permissions": {
+                            "keys": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "Decrypt",
+                                "Encrypt",
+                                "UnwrapKey",
+                                "WrapKey",
+                                "Verify",
+                                "Sign",
+                                "Purge"
+                            ],
+                            "secrets": [
+                                "Get",
+                                "List",
+                                "Set",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "Purge"
+                            ],
+                            "certificates": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "ManageContacts",
+                                "ManageIssuers",
+                                "GetIssuers",
+                                "ListIssuers",
+                                "SetIssuers",
+                                "DeleteIssuers",
+                                "Purge"
+                            ]
+                        }
+                    }
+                ],
                 "enabledForDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": false,
