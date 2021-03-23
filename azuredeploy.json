@@ -277,25 +277,6 @@
             }
         },
         {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_ghhack_name'), '/0837cea479304c41856b7b71e5956087')]",
-            "location": "Korea Central",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_ghhack_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"c922f9f82991c9ffb04e80fae83b473da019e804\",\"repoName\":\"sukso96100/animal-adoption-portal\",\"slotName\":\"production\"}",
-                "start_time": "2021-03-22T01:43:46.2715701Z",
-                "end_time": "2021-03-22T01:43:58.4595102Z",
-                "active": false
-            }
-        },
-        {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
             "name": "[concat(parameters('sites_ghhack_name'), '/', parameters('sites_ghhack_name'), '.azurewebsites.net')]",
