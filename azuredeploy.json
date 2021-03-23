@@ -32,69 +32,7 @@
                     "name": "Standard"
                 },
                 "tenantId": "6d5ac8ee-3862-4452-93e7-a836c2d9742b",
-                "accessPolicies": [
-                    {
-                        "tenantId": "6d5ac8ee-3862-4452-93e7-a836c2d9742b",
-                        "objectId": "5da7520f-687b-48ea-9949-94c06a1f4c58",
-                        "permissions": {
-                            "keys": [],
-                            "secrets": [
-                                "Get",
-                                "List",
-                                "Set",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore",
-                                "Purge"
-                            ],
-                            "certificates": []
-                        }
-                    },
-                    {
-                        "tenantId": "6d5ac8ee-3862-4452-93e7-a836c2d9742b",
-                        "objectId": "e50779bb-c80c-42e8-9537-5938988ac6c8",
-                        "permissions": {
-                            "keys": [
-                                "Get",
-                                "List",
-                                "Update",
-                                "Create",
-                                "Import",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore"
-                            ],
-                            "secrets": [
-                                "Get",
-                                "List",
-                                "Set",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore"
-                            ],
-                            "certificates": [
-                                "Get",
-                                "List",
-                                "Update",
-                                "Create",
-                                "Import",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore",
-                                "ManageContacts",
-                                "ManageIssuers",
-                                "GetIssuers",
-                                "ListIssuers",
-                                "SetIssuers",
-                                "DeleteIssuers"
-                            ]
-                        }
-                    }
-                ],
+                "accessPolicies":[],
                 "enabledForDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": false,
