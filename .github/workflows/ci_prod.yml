@@ -67,7 +67,7 @@ jobs:
           inlineScript: |
             Install-Module Az.AlertsManagement -Scope CurrentUser -Force
             Import-Module Az.AlertsManagement
-            $ProdAlert = Get-AzAlert -AlertId ${{ env.AZALERT_ID }} -MonitorCondition "Fired" -TimeRange '1h' | ConvertTo-JSON
+            $ProdAlert = Get-AzAlert -TargetResourceGroup ${{ env.AZURE_RGNAME }} -MonitorCondition "Fired" -TimeRange '1h' | ConvertTo-JSON
             echo "::set-output name=prodAlert::${ProdAlert}"
           azPSVersion: latest
           errorActionPreference: stop
