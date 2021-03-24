@@ -53,6 +53,7 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_PROD }}
+          enable-AzPSSession: true
       - uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.AZURE_RGNAME }}
@@ -77,3 +78,10 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
           package: ${{ env.ARTIFACT_NAME }}
           slot-name: 'staging'
+      - name: Check App Service Alert Status
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            Get-AzResource -ResourceType Microsoft.insights/metricalerts -ResourceGroupName ${{ env.AZURE_RGNAME }}
+          azPSVersion: latest
+          errorActionPreference: stop
