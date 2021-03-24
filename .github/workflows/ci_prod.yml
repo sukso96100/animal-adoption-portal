@@ -82,6 +82,6 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            Get-AzResource -ResourceType Microsoft.insights/metricalerts -ResourceGroupName ${{ env.AZURE_RGNAME }}
+            Get-AzAlert -TargetResourceGroup ${{ env.AZURE_RGNAME }} -MonitorCondition "Fired" -TimeRange '1h' | ConvertTo-JSON
           azPSVersion: latest
           errorActionPreference: stop
