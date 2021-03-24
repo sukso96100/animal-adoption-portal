@@ -82,6 +82,8 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
+            Install-Module Az.AlertsManagement -Scope CurrentUser -Force
+            Import-Module Az.AlertsManagement
             Get-AzAlert -TargetResourceGroup ${{ env.AZURE_RGNAME }} -MonitorCondition "Fired" -TimeRange '1h' | ConvertTo-JSON
           azPSVersion: latest
           errorActionPreference: stop
