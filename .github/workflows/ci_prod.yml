@@ -16,9 +16,8 @@ env:
 
 jobs:
   build:
-
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -40,9 +39,9 @@ jobs:
       with:
         name: ${{ env.ARTIFACT_NAME }}
         path: build
-  deploy:
+  configure:
     runs-on: ubuntu-latest
-    name: Deploy
+    name: Configure
     needs: build
     steps:
       - uses: actions/checkout@v2
@@ -68,7 +67,7 @@ jobs:
             Install-Module Az.AlertsManagement -Scope CurrentUser -Force
             Import-Module Az.AlertsManagement
             $ProdAlert = Get-AzAlert -TargetResourceGroup ${{ env.AZURE_RGNAME }} -MonitorCondition "Fired" -TimeRange '1h' | ConvertTo-JSON
-            echo "::set-output name=prodAlert::${ProdAlert}"
+            if($ProdAlert -Eq $null){ echo "::set-output name=isGoodToGo::true" }
           azPSVersion: latest
           errorActionPreference: stop
           id: checkProdAlert
@@ -84,6 +83,12 @@ jobs:
           # app-settings-json: '${{ secrets.APP_SETTINGS }}' 
           app-settings-json: '[{ "name": "GlobalPassword", "value": "${{ steps.azKeyvaultSecret.outputs.aaploginpass }}", "slotSetting": false }, { "name": "APPINSIGHTS_INSTRUMENTATIONKEY", "value": "${{ secrets.APPINSIGHTS_INSTRUMENTATIONKEY }}", "slotSetting": false }]'
         id: settings
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    needs: configure
+    if: needs.configure.outputs.isGoodToGo == true
+    steps:
       - name: 'Run Azure webapp deploy action using publish profile credentials'
         uses: azure/webapps-deploy@v2
         with: 
