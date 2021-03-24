@@ -12,6 +12,7 @@ env:
   ARTIFACT_NAME: dotnetapp
   AZURE_RGNAME: youngbin-iac-rg-test
   OPENQA_TEST_URL: https://hybiacweb.azurewebsites.net/
+  AZALERT_ID: 934f35c4-a5bc-461e-9ccd-875d168eb168
 
 jobs:
   build:
@@ -66,7 +67,7 @@ jobs:
           inlineScript: |
             Install-Module Az.AlertsManagement -Scope CurrentUser -Force
             Import-Module Az.AlertsManagement
-            $ProdAlert = Get-AzAlert -TargetResourceGroup ${{ env.AZURE_RGNAME }} -MonitorCondition "Fired" -TimeRange '1h' | ConvertTo-JSON
+            $ProdAlert = Get-AzAlert -AlertId ${{ env.AZALERT_ID }} -MonitorCondition "Fired" -TimeRange '1h' | ConvertTo-JSON
             echo "::set-output name=prodAlert::${ProdAlert}"
           azPSVersion: latest
           errorActionPreference: stop
