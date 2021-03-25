@@ -71,13 +71,13 @@ jobs:
           # app-settings-json: '${{ secrets.APP_SETTINGS }}' 
           app-settings-json: '[{ "name": "GlobalPassword", "value": "${{ steps.azKeyvaultSecret.outputs.aaploginpass }}", "slotSetting": false }, { "name": "APPINSIGHTS_INSTRUMENTATIONKEY", "value": "${{ secrets.APPINSIGHTS_INSTRUMENTATIONKEY }}", "slotSetting": false }]'
         id: settings
-      - name: 'Run Azure webapp deploy action using publish profile credentials'
+      - name: 'Deploy to App Service staging slot'
         uses: azure/webapps-deploy@v2
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
           package: ${{ env.ARTIFACT_NAME }}
           slot-name: 'staging'
-  deploy:
+  monitor:
     runs-on: ubuntu-latest
     name: Monitor
     needs: release
@@ -97,5 +97,18 @@ jobs:
           azPSVersion: latest
           errorActionPreference: stop
         id: checkProdAlert
-      
-      
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    needs: [release, monitor]
+    if: needs.monitor.outputs.isGoodToGo == 'true'
+    steps:
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_PROD }}
+      - name: Deploy to production by swapping App Service Slots
+        uses: azure/CLI@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az webapp deployment slot swap -n ${{ env.AZURE_WEBAPP_NAME }} -g ${{ env.AZURE_RGNAME }} -s "staging" --target-slot "production"
