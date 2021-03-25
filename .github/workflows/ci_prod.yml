@@ -53,7 +53,6 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_PROD }}
-          enable-AzPSSession: true
       - uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.AZURE_RGNAME }}
@@ -83,6 +82,10 @@ jobs:
     name: Monitor
     needs: release
     steps:
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_PROD }}
+          enable-AzPSSession: true
       - name: Check App Service Alert Status
         uses: azure/powershell@v1
         with:
@@ -93,6 +96,6 @@ jobs:
             if($ProdAlert -Eq $null){ echo "::set-output name=isGoodToGo::true" }
           azPSVersion: latest
           errorActionPreference: stop
-          id: checkProdAlert
+        id: checkProdAlert
       
       
