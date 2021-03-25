@@ -60,11 +60,10 @@ jobs:
           parameters: .azuredeploy.parameters.json
           deploymentMode: Incremental
       - uses: Azure/get-keyvault-secrets@v1
+        id: azKeyvaultSecret
         with:
           keyvault: "hybiackv"
           secrets: 'aaploginpass'  # comma separated list of secret keys that need to be fetched from the Key Vault 
-          slot-name: 'staging'
-        id: azKeyvaultSecret
       - uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
@@ -81,12 +80,15 @@ jobs:
     runs-on: ubuntu-latest
     name: Monitor
     needs: release
+    outputs:
+      isGoodToGo: ${{ steps.checkProdAlert.outputs.isGoodToGo }}
     steps:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_PROD }}
           enable-AzPSSession: true
       - name: Check App Service Alert Status
+        id: checkProdAlert
         uses: azure/powershell@v1
         with:
           inlineScript: |
@@ -96,12 +98,11 @@ jobs:
             if($ProdAlert -Eq $null){ echo "::set-output name=isGoodToGo::true" }
           azPSVersion: latest
           errorActionPreference: stop
-        id: checkProdAlert
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
     needs: [release, monitor]
-    if: needs.monitor.outputs.isGoodToGo == 'true'
+    # if: ${{  needs.monitor.outputs.isGoodToGo == 'true' }}
     steps:
       - uses: azure/login@v1
         with:
