@@ -39,9 +39,9 @@ jobs:
       with:
         name: ${{ env.ARTIFACT_NAME }}
         path: build
-  configure:
+  release:
     runs-on: ubuntu-latest
-    name: Configure
+    name: Release
     needs: build
     steps:
       - uses: actions/checkout@v2
@@ -60,17 +60,6 @@ jobs:
           template: ./azuredeploy.json
           parameters: .azuredeploy.parameters.json
           deploymentMode: Incremental
-      - name: Check App Service Alert Status
-        uses: azure/powershell@v1
-        with:
-          inlineScript: |
-            Install-Module Az.AlertsManagement -Scope CurrentUser -Force
-            Import-Module Az.AlertsManagement
-            $ProdAlert = Get-AzAlert -TargetResourceGroup ${{ env.AZURE_RGNAME }} -MonitorCondition "Fired" -TimeRange '1h' | ConvertTo-JSON
-            if($ProdAlert -Eq $null){ echo "::set-output name=isGoodToGo::true" }
-          azPSVersion: latest
-          errorActionPreference: stop
-          id: checkProdAlert
       - uses: Azure/get-keyvault-secrets@v1
         with:
           keyvault: "hybiackv"
@@ -83,16 +72,27 @@ jobs:
           # app-settings-json: '${{ secrets.APP_SETTINGS }}' 
           app-settings-json: '[{ "name": "GlobalPassword", "value": "${{ steps.azKeyvaultSecret.outputs.aaploginpass }}", "slotSetting": false }, { "name": "APPINSIGHTS_INSTRUMENTATIONKEY", "value": "${{ secrets.APPINSIGHTS_INSTRUMENTATIONKEY }}", "slotSetting": false }]'
         id: settings
-  deploy:
-    runs-on: ubuntu-latest
-    name: Deploy
-    needs: configure
-    if: needs.configure.outputs.isGoodToGo == true
-    steps:
       - name: 'Run Azure webapp deploy action using publish profile credentials'
         uses: azure/webapps-deploy@v2
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
           package: ${{ env.ARTIFACT_NAME }}
           slot-name: 'staging'
+  deploy:
+    runs-on: ubuntu-latest
+    name: Monitor
+    needs: release
+    steps:
+      - name: Check App Service Alert Status
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            Install-Module Az.AlertsManagement -Scope CurrentUser -Force
+            Import-Module Az.AlertsManagement
+            $ProdAlert = Get-AzAlert -TargetResourceGroup ${{ env.AZURE_RGNAME }} -MonitorCondition "Fired" -TimeRange '1h' | ConvertTo-JSON
+            if($ProdAlert -Eq $null){ echo "::set-output name=isGoodToGo::true" }
+          azPSVersion: latest
+          errorActionPreference: stop
+          id: checkProdAlert
+      
       
