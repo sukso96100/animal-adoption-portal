@@ -12,4 +12,4 @@ RUN dotnet publish AnimalAdoption.Web.Portal -c release -o /app -r linux-x64 --s
 FROM mcr.microsoft.com/dotnet/runtime-deps:5.0-focal-amd64
 WORKDIR /app
 COPY --from=build /app ./
-ENTRYPOINT ["./aspnetapp"]
+ENTRYPOINT ["./AnimalAdoption.Web.Portal"]

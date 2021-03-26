@@ -67,7 +67,7 @@ jobs:
       - uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          # app-settings-json: '${{ secrets.APP_SETTINGS }}' 
+          slot-name: 'staging'
           app-settings-json: '[{ "name": "GlobalPassword", "value": "${{ steps.azKeyvaultSecret.outputs.aaploginpass }}", "slotSetting": false }, { "name": "APPINSIGHTS_INSTRUMENTATIONKEY", "value": "${{ secrets.APPINSIGHTS_INSTRUMENTATIONKEY }}", "slotSetting": false }]'
         id: settings
       - name: 'Deploy to App Service staging slot'
