@@ -1,4 +1,4 @@
-name: .NET Productuion
+name: .NET Container
 
 on:
   push:
@@ -45,7 +45,7 @@ jobs:
       - uses: Azure/get-keyvault-secrets@v1
         id: azKeyvaultSecret
         with:
-          keyvault: "hybiackv"
+          keyvault: "youngbin-test-keyvault"
           secrets: 'aaploginpass'  # comma separated list of secret keys that need to be fetched from the Key Vault 
       - uses: azure/appservice-settings@v1
         with:
